@@ -30,7 +30,7 @@ public class FrontController extends HttpServlet {
 			throws ServletException, IOException {
 		String requestUri = req.getRequestURI();
 		logger.debug("Method : {}, Request URI : {}", req.getMethod(), requestUri);
-		logger.debug(urlExceptParameter(req.getRequestURI()));
+		
 		Controller controller = rm.findController(urlExceptParameter(req.getRequestURI()));
 		String viewName;
 		try {

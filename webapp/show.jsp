@@ -65,8 +65,8 @@
 	                ${ans.contents}
 	            </div>
 	        </div>
-	        <c:if test="${status.last}"> 마지막 답변입니다. </c:if>
-	        <!-- el, jstl 추가 기능 테스트 ^^;  -->
+	        <!-- EL, JSTL 추가 기능 테스트 ^^;  -->
+	        <c:if test="${status.last}"> 답변의 끝입니다. </c:if>
         </c:forEach>  
 	</div>
 	<!-- comments end -->

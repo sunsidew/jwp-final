@@ -17,6 +17,7 @@ public class RequestMapping {
 		mappings.put("/show.next", new ShowController());
 		mappings.put("/form.next", new ForwardController("form.jsp"));
 		mappings.put("/save.next", new SaveController());
+		mappings.put("/api/addanswer.next", new AddanswerController());
 		
 		logger.info("Initialized Mapping Completed!");
 	}

@@ -14,7 +14,11 @@ public class SaveController implements Controller {
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
-		Question question = new Question(request.getParameter("writer"), request.getParameter("title"), request.getParameter("contents"));
+		Question question = new Question(
+				request.getParameter("writer"), 
+				request.getParameter("title"), 
+				request.getParameter("contents")
+		);
 		questionDao.insert(question);
 		return "redirect:/list.next";
 	}
