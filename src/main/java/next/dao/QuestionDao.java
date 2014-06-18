@@ -39,30 +39,45 @@ public class QuestionDao {
 	}
 
 	public List<Question> findAll() throws SQLException {
+		String sql = "SELECT questionId, writer, title, createdDate, countOfComment FROM QUESTIONS " + 
+				"order by questionId desc";
+		return DBconnect(sql, "All");
+	}
+
+	public Question findById(long questionId) throws SQLException {
+		String sql = "SELECT questionId, writer, title, contents, createdDate, countOfComment FROM QUESTIONS " + 
+				"WHERE questionId = " + questionId;
+		
+		return (Question) DBconnect(sql, "One").get(0);
+	}
+	
+	public List<Question> DBconnect (String sql, String flag) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			con = ConnectionManager.getConnection();
-			String sql = "SELECT questionId, writer, title, createdDate, countOfComment FROM QUESTIONS " + 
-					"order by questionId desc";
 			pstmt = con.prepareStatement(sql);
-
 			rs = pstmt.executeQuery();
-
-			List<Question> questions = new ArrayList<Question>();
+			
 			Question question = null;
+			List<Question> questions = new ArrayList<Question>();
+			
 			while (rs.next()) {
 				question = new Question(
 						rs.getLong("questionId"),
 						rs.getString("writer"),
 						rs.getString("title"),
-						null,
+						flag == "One" ? rs.getString("contents") : null,
 						rs.getTimestamp("createdDate"),
 						rs.getInt("countOfComment"));
 				questions.add(question);
+				
+				if (flag == "One") {
+					break;
+				}
 			}
-
+				
 			return questions;
 		} finally {
 			if (rs != null) {
@@ -75,43 +90,6 @@ public class QuestionDao {
 				con.close();
 			}
 		}
-	}
 
-	public Question findById(long questionId) throws SQLException {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			con = ConnectionManager.getConnection();
-			String sql = "SELECT questionId, writer, title, contents, createdDate, countOfComment FROM QUESTIONS " + 
-					"WHERE questionId = ?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setLong(1, questionId);
-
-			rs = pstmt.executeQuery();
-
-			Question question = null;
-			if (rs.next()) {
-				question = new Question(
-						rs.getLong("questionId"),
-						rs.getString("writer"),
-						rs.getString("title"),
-						rs.getString("contents"),
-						rs.getTimestamp("createdDate"),
-						rs.getInt("countOfComment"));
-			}
-
-			return question;
-		} finally {
-			if (rs != null) {
-				rs.close();
-			}
-			if (pstmt != null) {
-				pstmt.close();
-			}
-			if (con != null) {
-				con.close();
-			}
-		}
 	}
 }
